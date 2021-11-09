@@ -1,3 +1,87 @@
+### 构造函数 
+```js
+function Person(){
+    this.name = "zqq";
+    this.age = 28;
+}
+var p = new Person();
+```
+
+### 当new Person()时发生了什么? 
+```js
+// 1.创建一个空对象
+var p = {};
+
+// 2.this变量指向对象p
+Person.call(p)
+
+// 3.p继承了构造函数Person()的原型
+p.__proto__ = Person.prototype
+
+// 4.执行构造函数Person()内的代码
+```
+
+### 高阶函数
+
+#### 不使用高阶函数
+```js
+const arr1 = [1, 2, 3];
+const arr2 = [];
+
+for (let i = 0; i < arr1.length; i++) {
+    arr2.push(arr1[i] * 2);
+}
+console.log(arr2)
+```
+
+#### 使用高阶函数map
+```js
+const arr1 = [1, 2, 3];
+const arr2 = arr1.map(function(item) {
+    return item * 2;
+});
+console.log(arr2);
+```
+
+#### 自定义
+```js
+function formalGreeting() {
+    console.log("How are you?");
+}
+
+function casualGreeting() {
+    console.log("What's up?")
+}
+
+function greet(type, greetFormal, greetCasual) {
+    if (type === 'formal') {
+        greetFormal();
+    } else if (type === 'casual') {
+        greetCasual();
+    }
+}
+
+greet('casual', formalGreeting, casualGreeting)
+```
+
+### 柯里化
+```js
+// 普通方法
+var add = function(x, y) {
+    return x + y;
+}
+add(3, 4)
+
+
+var foo = function(x) {
+    return function(y) {
+        return x + y
+    }
+}
+    
+foo(3)(4)
+```
+
 ## 创建自定义对象的几种方法
 
 1 new object
@@ -69,18 +153,24 @@ console.log(stu2);
 stu2.sayHi();
 ```
 
-### new操作符
-```js 
-function myNew(func, ...args) {
-    // 创建一个空对象
-    let obj = {}
-    // 将对象与构造函数原型链接起来
-    Object.setPrototypeOf(obj, func.prototype)
-    // 将构造函数的 this 指向新生成的空对象
-    let result = func.apply(obj, args)
-    // 最后返回新对象的实例
-    return result
-}
+### 对象属性
+```js
+const obj = {
+  name: 'Hello',
+  sex: 'M',
+  birthday: '2000-10-10',
+  grade: 99
+};
+console.log(Object.getOwnPropertyDescriptor(obj, 'name'))
+console.log(Object.getOwnPropertyNames(obj))
+Object.defineProperty(obj, 'name', {
+    value: 'World',
+    writable: true,
+    enumerable: false,
+    configurable: true
+});
+console.log(Object.getOwnPropertyDescriptor(obj, 'name'))
+console.log(Object.getOwnPropertyNames(obj), Object.keys(obj));
 ```
 
 ## 原型
@@ -91,21 +181,9 @@ var person = new Person();
 
 console.log(person.__proto__ == Person.prototype) 
 console.log(Person.prototype.constructor == Person)
-console.log(Object.getPrototypeOf(person) === Person.prototype)
-```
+console.log(person.__proto__.constructor === Person);
 
-### 原型对象 constructor
-```js
-function Foo (name) {
-    this.name = name;
-}
-var foo = new Foo('smyhvae');
-console.log(foo instanceof Foo);
-console.log(foo instanceof Object);
-console.log(foo.__proto__ === Foo.prototype)
-console.log(Foo.prototype.__proto__ === Object.prototype);
-console.log(foo.__proto__.constructor === Foo);
-console.log(foo.__proto__.constructor === Object);
+console.log(Object.getPrototypeOf(person) === Person.prototype)
 ```
 
 ### 原型查找
@@ -123,13 +201,25 @@ delete person.name;
 console.log(person.name) // Kevin
 ```
 
+### 原型对象 constructor
+```js
+function Foo (name) {
+    this.name = name;
+}
+var foo = new Foo('smyhvae');
+console.log(foo instanceof Foo);
+console.log(foo instanceof Object);
+console.log(foo.__proto__.constructor === Foo);
+console.log(foo.__proto__.constructor === Object);
+```
+
 ### 原型的原型
 ```js
 function Person() {}
 var person = new Person();
 
+console.log(Person.prototype.__proto__ === Object.prototype)
 console.log(Object.prototype.__proto__ === null) 
-console.log(person.constructor === Person.prototype.constructor)
 ```
 
 ##继承的几种方式
@@ -186,4 +276,3 @@ Child3.prototype = new Parent3(); //第二次执行parent方法
 
 var child = new Child3();
 ```
-
