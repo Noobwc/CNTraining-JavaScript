@@ -16,7 +16,7 @@
   "type": "module",
   "devDependencies": {
     "babel-jest": "^26.1.0",
-    "jest": "^26.1.0"
+    "jest": "^25.5.4"
   },
   "dependencies": {
     "@babel/core": "^7.10.5",
